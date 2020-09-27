@@ -1,50 +1,19 @@
 const { abstractFactory } = require('../utils/abstractFactory');
 
-class Abc {
+class PersistorSingleton {
   static get instance() {
-    return Abc._instance;
+    return PersistorSingleton._instance;
   }
 
   static set instance(instance) {
-    Abc._instance = instance;
-  }
-
-  constructor(name) {
-    this._name = name;
-
-    Abc.instance = this;
-  }
-}
-class Abcd {
-  static get instance() {
-    return Abcd._instance;
-  }
-
-  static set instance(instance) {
-    Abcd._instance = instance;
-  }
-
-  constructor(name) {
-    this._name = name;
-
-    Abcd.instance = this;
-  }
-}
-
-class Persist {
-  static get instance() {
-    return Persist._instance;
-  }
-
-  static set instance(instance) {
-    Persist._instance = instance;
+    PersistorSingleton._instance = instance;
   }
 
   constructor(persist_class_map = {}) {
     this._persist_class_map = persist_class_map;
 
-    if (Persist.instance) {
-      return Persist.instance;
+    if (PersistorSingleton.instance) {
+      return PersistorSingleton.instance;
     }
 
     const PersistFactory = abstractFactory(this._persist_class_map);
@@ -56,7 +25,7 @@ class Persist {
       this._persists[k] = PersistFactory(k, ...parameters);
     }
 
-    Persist.instance = this;
+    PersistorSingleton.instance = this;
   }
 
   getPersistInstance(class_) {
@@ -69,13 +38,6 @@ class Persist {
   }
 }
 
-const PersistSingleton = new Persist({
-  abc: [Abc, 'Daniel'],
-  abcd: [Abcd, 'abcd'],
-});
-
-console.log(PersistSingleton);
-
 module.exports = {
-  PersistSingleton: Persist,
+  PersistorSingleton,
 };

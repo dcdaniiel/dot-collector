@@ -1,4 +1,4 @@
-const uuid = require('uuid/v1');
+const { v1: uuid } = require('uuid');
 const { PersistorSingleton } = require('./persist/persist');
 
 class BaseEntity {
@@ -12,15 +12,10 @@ class BaseEntity {
 
   constructor() {
     this._id = uuid();
-    this._created_at = new Date();
   }
 
   get id() {
     return this._id;
-  }
-
-  get created_at() {
-    return this._created_at;
   }
 
   serialize() {
@@ -45,11 +40,11 @@ class PersistedEntity extends BaseEntity {
   }
 
   static async delete(...args) {
-    return await this.getPersist().delete(...args);
+    return this.getPersist().delete(...args);
   }
 
   static async deleteAll() {
-    return await this.getPersist().deleteAll();
+    return this.getPersist().deleteAll();
   }
 
   constructor() {
@@ -65,3 +60,8 @@ class PersistedEntity extends BaseEntity {
     return this;
   }
 }
+
+module.exports = {
+  BaseEntity,
+  PersistedEntity,
+};

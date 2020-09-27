@@ -1,7 +1,7 @@
 const Koa = require('koa');
 const respond = require('koa-respond');
 const bodyParse = require('koa-bodyparser');
-const persist = require('./core/persist/persist');
+require('./teste_persist');
 
 const router = require('./routes');
 
