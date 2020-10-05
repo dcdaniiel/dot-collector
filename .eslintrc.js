@@ -15,6 +15,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'max-classes-per-file': 'off',
     'no-underscore-dangle': 'off',
     'prettier/prettier': 'error',
     'class-methods-use-this': 'off',

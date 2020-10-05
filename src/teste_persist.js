@@ -15,7 +15,7 @@ class TestPersist {
   async saveUser() {
     const user = await new Users(
       'Daniel',
-      'daniela@gmail.com',
+      'daniel@gmail.com',
       '1996-07-19',
       'MYPASSWD'
     );
