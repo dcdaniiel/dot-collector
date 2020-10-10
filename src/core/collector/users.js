@@ -27,7 +27,10 @@ class Users extends PersistedEntity {
       user._id = serialized.id;
       user._created_at = serialized.created_at;
 
-      return user;
+      // eslint-disable-next-line no-unused-vars
+      const { _password, ...rest } = user;
+
+      return rest;
     }
     return undefined;
   }
@@ -54,4 +57,4 @@ class Users extends PersistedEntity {
   }
 }
 
-module.exports = { Users };
+module.exports = Users;

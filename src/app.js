@@ -1,24 +1,23 @@
 const Koa = require('koa');
 const respond = require('koa-respond');
 const bodyParse = require('koa-bodyparser');
-require('./teste_persist');
 
-const router = require('./routes');
+const router = require('./api/routes');
 
 require('dotenv').config();
 
 class App {
   constructor() {
-    this.server = new Koa();
+    this._server = new Koa();
 
     this.middlewares();
   }
 
   middlewares() {
-    this.server.use(respond());
-    this.server.use(bodyParse());
-    this.server.use(router.routes());
+    this._server.use(respond());
+    this._server.use(bodyParse());
+    this._server.use(router.routes());
   }
 }
 
-module.exports = new App().server;
+module.exports = { server: new App()._server };
