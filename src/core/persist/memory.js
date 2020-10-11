@@ -63,7 +63,27 @@ class UsersMemoryPersist extends MemoryPersist {
   }
 }
 
+class EventsMemoryPersist extends MemoryPersist {
+  get instance() {
+    return this._instance;
+  }
+
+  set instance(instance) {
+    this._instance = instance;
+  }
+
+  constructor() {
+    super(Users);
+    if (UsersMemoryPersist.instance) {
+      return UsersMemoryPersist.instance;
+    }
+
+    UsersMemoryPersist.instance = this;
+  }
+}
+
 module.exports = {
   MemoryPersist,
   UsersMemoryPersist,
+  EventsMemoryPersist,
 };

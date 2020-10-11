@@ -1,4 +1,4 @@
-const { Users } = require('../collector/users');
+const { Users, Events } = require('../collector');
 
 class KnexPersist {
   constructor(db, class_, table) {
@@ -56,7 +56,14 @@ class UserKnexPersist extends KnexPersist {
   }
 }
 
+class EventKnexPersist extends KnexPersist {
+  constructor(db) {
+    super(db, Events, 'events');
+  }
+}
+
 module.exports = {
   KnexPersist,
   UserKnexPersist,
+  EventKnexPersist,
 };
