@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const assert = require('assert');
+const { Users } = require('../collector');
 
 class MemoryPersist {
   constructor(class_) {
@@ -42,3 +43,27 @@ class MemoryPersist {
     this._store[obj_id] = _.cloneDeep(obj);
   }
 }
+
+class UsersMemoryPersist extends MemoryPersist {
+  get instance() {
+    return this._instance;
+  }
+
+  set instance(instance) {
+    this._instance = instance;
+  }
+
+  constructor() {
+    super(Users);
+    if (UsersMemoryPersist.instance) {
+      return UsersMemoryPersist.instance;
+    }
+
+    UsersMemoryPersist.instance = this;
+  }
+}
+
+module.exports = {
+  MemoryPersist,
+  UsersMemoryPersist,
+};

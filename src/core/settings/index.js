@@ -1,5 +1,6 @@
 const db = require('../db');
 
 module.exports = {
-  persistorProviderSettings: ['knex', db],
+  persistorProviderSettings:
+    process.env.settings === 'dev' ? ['memory'] : ['knex', db],
 };
