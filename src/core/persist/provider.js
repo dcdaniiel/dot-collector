@@ -15,6 +15,10 @@ class PersistorProvider {
           Users: [UserKnexPersist, db],
         };
         break;
+      case 'memory':
+        class_map = {
+          Users: [],
+        };
       default:
         throw Error('Invalid persist mode');
     }

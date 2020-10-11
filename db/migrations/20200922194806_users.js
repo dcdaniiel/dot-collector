@@ -5,7 +5,7 @@ exports.up = function (knex) {
     table.string('email', 255).notNullable().unique();
     table.string('birthday', 15).notNullable();
     table.string('password').notNullable();
-    table.time('created_at').defaultTo(knex.fn.now());
+    table.timestamp('created_at').defaultTo(knex.fn.now());
   });
 };
 

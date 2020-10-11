@@ -22,10 +22,7 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "knex": "^0.21.5",
-    "koa": "^2.13.0",
-    "koa-bodyparser": "^4.3.0",
-    "koa-respond": "^2.1.0",
-    "koa-router": "^9.4.0",
+    "lodash": "^4.17.20",
     "pg": "^8.3.3",
     "uuid": "^8.3.0"
   },
