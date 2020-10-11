@@ -17,7 +17,7 @@ class Events extends PersistedEntity {
     if (serialized) {
       const event = new Events(serialized.name);
       event._id = serialized.id;
-      event._created_at = serialized.id;
+      event._created_at = serialized.created_at;
 
       return event;
     }

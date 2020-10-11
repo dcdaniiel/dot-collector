@@ -1,11 +1,16 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
 const { Events } = require('../index');
+const { persist_options } = require('../../settings');
 
 beforeEach(async () => {
-  const persistor = PersistorProvider.getPersistor('memory');
-  const Event = persistor.getPersistInstance('Events');
-  Event.deleteAll();
+  await _clean();
+});
+
+afterAll(async () => {
+  if (persist_options[0] === 'knex') {
+    await Events.getPersist()._db.destroy();
+  }
 });
 
 describe('Events', () => {
@@ -44,3 +49,9 @@ describe('Events', () => {
     expect(fetched_Event).toBeFalsy();
   });
 });
+
+const _clean = () => {
+  const persistor = PersistorProvider.getPersistor(...persist_options);
+  const Event = persistor.getPersistInstance('Events');
+  Event.deleteAll();
+};

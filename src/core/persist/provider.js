@@ -1,4 +1,8 @@
-const { UserKnexPersist, EventKnexPersist } = require('./knex');
+const {
+  UserKnexPersist: UsersKnexPersist,
+  EventKnexPersist: EventsKnexPersist,
+  AttributeKnexPersist: AttributesKnexPersist,
+} = require('./knex');
 const { UsersMemoryPersist, EventsMemoryPersist } = require('./memory');
 const { PersistorSingleton } = require('./persist');
 
@@ -13,14 +17,16 @@ class PersistorProvider {
       case 'knex':
         const db = args[0];
         class_map = {
-          Users: [UserKnexPersist, db],
-          Events: [EventKnexPersist, db],
+          Users: [UsersKnexPersist, db],
+          Events: [EventsKnexPersist, db],
+          Attributes: [AttributesKnexPersist, db],
         };
         break;
       case 'memory':
         class_map = {
           Users: [UsersMemoryPersist],
           Events: [EventsMemoryPersist],
+          Attributes: [EventsMemoryPersist],
         };
         break;
       default:

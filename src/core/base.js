@@ -12,9 +12,14 @@ class BaseEntity {
 
   constructor() {
     this._id = uuid();
+    this._created_at = new Date();
   }
 
   get id() {
+    return this._id;
+  }
+
+  get created_at() {
     return this._id;
   }
 

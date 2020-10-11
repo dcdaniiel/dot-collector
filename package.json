@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "dev:debug": "nodemon --inspect src/server.js",
-    "test": "jest",
-    "migration": "knex migrate:up"
+    "tests": "export test_persist_option='knex' && jest -i --detectOpenHandles",
+    "tests-memory": "export test_persist_option='memory' && jest -i",
+    "seeds": "knex --env ${NODE_ENV} --knexfile knexfile.js seed:run",
+    "migrations": "knex --env ${NODE_ENV} --knexfile knexfile.js migrate:latest"
   },
   "repository": {
     "type": "git",

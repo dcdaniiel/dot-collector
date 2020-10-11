@@ -1,11 +1,17 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
 const Users = require('../users');
+const { persist_options } = require('../../settings');
 
 beforeEach(async () => {
-  const persistor = PersistorProvider.getPersistor('memory');
-  const user = persistor.getPersistInstance('Users');
-  user.deleteAll();
+  await _clean();
+});
+
+afterAll(async () => {
+  await _clean();
+  if (persist_options[0] === 'knex') {
+    await Users.getPersist()._db.destroy();
+  }
 });
 
 describe('User', () => {
@@ -44,3 +50,9 @@ describe('User', () => {
     expect(fetched_user).toBeFalsy();
   });
 });
+
+const _clean = () => {
+  const persistor = PersistorProvider.getPersistor(...persist_options);
+  const user = persistor.getPersistInstance('Users');
+  user.deleteAll();
+};

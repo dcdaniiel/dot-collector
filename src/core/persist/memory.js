@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const assert = require('assert');
-const { Users } = require('../collector');
+const { Users, Events, Attributes } = require('../collector');
 
 class MemoryPersist {
   constructor(class_) {
@@ -73,12 +73,31 @@ class EventsMemoryPersist extends MemoryPersist {
   }
 
   constructor() {
-    super(Users);
-    if (UsersMemoryPersist.instance) {
-      return UsersMemoryPersist.instance;
+    super(Events);
+    if (EventsMemoryPersist.instance) {
+      return EventsMemoryPersist.instance;
     }
 
-    UsersMemoryPersist.instance = this;
+    EventsMemoryPersist.instance = this;
+  }
+}
+
+class AttributesMemoryPersist extends MemoryPersist {
+  get instance() {
+    return this._instance;
+  }
+
+  set instance(instance) {
+    this._instance = instance;
+  }
+
+  constructor() {
+    super(Attributes);
+    if (AttributesMemoryPersist.instance) {
+      return AttributesMemoryPersist.instance;
+    }
+
+    AttributesMemoryPersist.instance = this;
   }
 }
 
@@ -86,4 +105,5 @@ module.exports = {
   MemoryPersist,
   UsersMemoryPersist,
   EventsMemoryPersist,
+  AttributesMemoryPersist,
 };
