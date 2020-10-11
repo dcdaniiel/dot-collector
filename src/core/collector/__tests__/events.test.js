@@ -48,6 +48,21 @@ describe('Events', () => {
     fetched_Event = await Events.fetch(Event.id);
     expect(fetched_Event).toBeFalsy();
   });
+
+  it('should not accept duplicate attribute', async () => {
+    let val;
+    const Event = new Events('event_duplicate');
+    await Event.save();
+
+    try {
+      const Duplicate = new Events('event_duplicate');
+      await Duplicate.save();
+      expect(true).toBe(false);
+    } catch (e) {
+      const message = `insert into "events" ("created_at", "id", "name") values ($1, $2, $3) - duplicate key value violates unique constraint "events_name_unique"`;
+      expect(e.message).toEqual(message);
+    }
+  });
 });
 
 const _clean = () => {
