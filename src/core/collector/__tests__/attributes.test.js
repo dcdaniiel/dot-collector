@@ -48,21 +48,6 @@ describe('Attributes', () => {
     fetched_Attribute = await Attributes.fetch(Attribute.id);
     expect(fetched_Attribute).toBeFalsy();
   });
-
-  it('should not accept duplicate attribute', async () => {
-    let val;
-    const Attribute = new Attributes('attr_duplicate');
-    await Attribute.save();
-
-    try {
-      const Duplicate = new Attributes('attr_duplicate');
-      await Duplicate.save();
-      expect(true).toBe(false);
-    } catch (e) {
-      const message = `insert into "attributes" ("created_at", "id", "name") values ($1, $2, $3) - duplicate key value violates unique constraint "attributes_name_unique"`;
-      expect(e.message).toEqual(message);
-    }
-  });
 });
 
 const _clean = () => {

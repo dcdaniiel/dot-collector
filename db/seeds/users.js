@@ -1,7 +1,7 @@
 const { v1: uuid } = require('uuid');
 
-exports.seed = function (knex) {
-  return knex('users')
+exports.seed = (knex) =>
+  knex('users')
     .del()
     .then(() =>
       knex('users').insert([
@@ -23,4 +23,3 @@ exports.seed = function (knex) {
         },
       ])
     );
-};
