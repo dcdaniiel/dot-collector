@@ -1,9 +1,8 @@
-const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
 const {
   Evaluations,
   EvaluationsStatus,
-  User,
+  Users,
   Attributes,
   Events,
 } = require('..');
@@ -27,8 +26,8 @@ const _clean = () => {
 beforeEach(async () => {
   await _clean();
 
-  await new User('test', 'a@g.com', '', '').save();
-  await new User('teste2', 'b@g.com', '', '').save();
+  await new Users('test', 'a@g.com', '', '').save();
+  await new Users('teste2', 'b@g.com', '', '').save();
   await new Events('eventName').save();
   await new Attributes('attributeName').save();
 });
@@ -48,7 +47,7 @@ describe('Evaluations', () => {
   });
 
   it('should create a evaluation', async () => {
-    const user = await User.getPersist().getAll();
+    const user = await Users.getPersist().getAll();
     const event = await Events.getPersist().first();
     const attribute = await Attributes.getPersist().first();
 
@@ -68,7 +67,7 @@ describe('Evaluations', () => {
   });
 
   it('should delete a evaluation', async () => {
-    const user = await User.getPersist().getAll();
+    const user = await Users.getPersist().getAll();
     const event = await Events.getPersist().first();
     const attribute = await Attributes.getPersist().first();
 

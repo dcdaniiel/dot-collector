@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
-const Users = require('../users');
+const { Users, Accounts } = require('..');
 const { persist_options } = require('../../settings');
 
 beforeEach(async () => {
@@ -48,6 +48,16 @@ describe('User', () => {
     await Users.delete(user.id);
     fetched_user = await Users.fetch(user.id);
     expect(fetched_user).toBeFalsy();
+  });
+
+  it('should create a user and account with user id', async () => {
+    let user = new Users('testName', 'test@test.com', '', '');
+    user = await user.save();
+
+    let account = await new Accounts().getPersist();
+    account = await account.getAccountUser(user.id);
+
+    expect(user.id).toBe(account.user_id);
   });
 });
 

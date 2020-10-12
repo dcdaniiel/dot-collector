@@ -10,6 +10,7 @@ const {
   EventsMemoryPersist,
   AttributesMemoryPersist,
   EvaluationsMemoryPersist,
+  AccountsMemoryPersist,
 } = require('./memory');
 const { PersistorSingleton } = require('./persist');
 
@@ -37,6 +38,7 @@ class PersistorProvider {
           Events: [EventsMemoryPersist],
           Attributes: [AttributesMemoryPersist],
           Evaluations: [EvaluationsMemoryPersist],
+          Accounts: [AccountsMemoryPersist],
         };
         break;
       default:

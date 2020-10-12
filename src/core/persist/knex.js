@@ -67,14 +67,13 @@ class UsersKnexPersist extends KnexPersist {
 
   async _create(obj) {
     try {
-      return await this._db.transaction(async (trx) => {
+      await this._db.transaction(async (trx) => {
         const user_ids = await trx(this._table).insert(obj, 'id');
         const account = new Accounts(user_ids[0]);
         await trx('accounts').insert(Accounts.serialize(account));
       });
     } catch (e) {
-      console.error('_create user trx: ', e.detail);
-      return e.detail;
+      console.log('_create user trx: ', e.detail);
     }
   }
 }
@@ -100,6 +99,10 @@ class EvaluationsKnexPersist extends KnexPersist {
 class AccountsKnexPersist extends KnexPersist {
   constructor(db) {
     super(db, Accounts, 'accounts');
+  }
+
+  getAccountUser(user_id) {
+    return this._db(this._table).where('user_id', user_id).first();
   }
 }
 

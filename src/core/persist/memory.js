@@ -1,6 +1,12 @@
 const _ = require('lodash');
 const assert = require('assert');
-const { Users, Events, Attributes, Evaluations } = require('../collector');
+const {
+  Users,
+  Events,
+  Attributes,
+  Evaluations,
+  Accounts,
+} = require('../collector');
 
 class MemoryPersist {
   constructor(class_) {
@@ -70,6 +76,15 @@ class UsersMemoryPersist extends MemoryPersist {
 
     UsersMemoryPersist.instance = this;
   }
+
+  async _create(obj) {
+    try {
+      this._store[obj.id] = _.cloneDeep(obj);
+      await new Accounts(obj.id).save();
+    } catch (e) {
+      console.log('user _create: ', e);
+    }
+  }
 }
 
 class EventsMemoryPersist extends MemoryPersist {
@@ -130,10 +145,35 @@ class EvaluationsMemoryPersist extends MemoryPersist {
   }
 }
 
+class AccountsMemoryPersist extends MemoryPersist {
+  get instance() {
+    return this._instance;
+  }
+
+  set instance(instance) {
+    this._instance = instance;
+  }
+
+  constructor() {
+    super(Accounts);
+
+    if (AccountsMemoryPersist.instance) {
+      return AccountsMemoryPersist.instance;
+    }
+
+    AccountsMemoryPersist.instance = this;
+  }
+
+  getAccountUser(user_id) {
+    return Object.values(this._store).find((acc) => acc.user_id === user_id);
+  }
+}
+
 module.exports = {
   MemoryPersist,
   UsersMemoryPersist,
   EventsMemoryPersist,
   AttributesMemoryPersist,
   EvaluationsMemoryPersist,
+  AccountsMemoryPersist,
 };
