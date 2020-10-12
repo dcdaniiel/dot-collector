@@ -6,7 +6,8 @@ exports.up = function (knex) {
       .references('users.id')
       .notNullable()
       .onUpdate('CASCADE')
-      .onDelete('CASCADE');
+      .onDelete('CASCADE')
+      .unique();
     table.timestamp('created_at').notNullable();
   });
 };
