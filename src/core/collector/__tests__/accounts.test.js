@@ -7,8 +7,8 @@ const _clean = async () => {
   const Account = persistor.getPersistInstance('Accounts');
   const User = persistor.getPersistInstance('Users');
 
-  await Account.deleteAll();
-  await User.deleteAll();
+  // await Account.deleteAll();
+  // await User.deleteAll();
 };
 
 beforeEach(async () => {
@@ -32,5 +32,13 @@ describe('Accounts', () => {
     const acc = await Accounts.getPersist().getAccountUser(user.id);
 
     expect(acc.user_id).toBe(user.id);
+  });
+
+  it(`don't create user duplicated`, async () => {
+    await new Users('test', 'a@a.com', '', '').save();
+    let user = await new Users('TESTE_2', 'a@a.com', '', '').save();
+    user = await Users.getPersist().get(user.id);
+
+    expect(user).toBeFalsy();
   });
 });

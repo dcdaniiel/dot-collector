@@ -78,9 +78,15 @@ class UsersMemoryPersist extends MemoryPersist {
   }
 
   async _create(obj) {
+    const verifyEmailDuplicated = Object.values(this._store).filter(
+      ({ email }) => email === obj.email
+    );
+
     try {
-      this._store[obj.id] = _.cloneDeep(obj);
-      await new Accounts(obj.id).save();
+      if (!verifyEmailDuplicated.length) {
+        this._store[obj.id] = _.cloneDeep(obj);
+        await new Accounts(obj.id).save();
+      }
     } catch (e) {
       console.log('user _create: ', e);
     }

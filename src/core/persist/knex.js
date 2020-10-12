@@ -67,13 +67,14 @@ class UsersKnexPersist extends KnexPersist {
 
   async _create(obj) {
     try {
-      await this._db.transaction(async (trx) => {
+      return await this._db.transaction(async (trx) => {
         const user_ids = await trx(this._table).insert(obj, 'id');
         const account = new Accounts(user_ids[0]);
         await trx('accounts').insert(Accounts.serialize(account));
       });
     } catch (e) {
       console.log('_create user trx: ', e.detail);
+      return e.detail;
     }
   }
 }
