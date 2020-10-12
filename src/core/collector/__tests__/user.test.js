@@ -51,8 +51,11 @@ describe('User', () => {
   });
 });
 
-const _clean = () => {
+const _clean = async () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);
   const user = persistor.getPersistInstance('Users');
-  user.deleteAll();
+  const account = persistor.getPersistInstance('Accounts');
+
+  await account.deleteAll();
+  await user.deleteAll();
 };

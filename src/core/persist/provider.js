@@ -3,6 +3,7 @@ const {
   EventsKnexPersist,
   AttributesKnexPersist,
   EvaluationsKnexPersist,
+  AccountsKnexPersist,
 } = require('./knex');
 const {
   UsersMemoryPersist,
@@ -27,6 +28,7 @@ class PersistorProvider {
           Events: [EventsKnexPersist, db],
           Attributes: [AttributesKnexPersist, db],
           Evaluations: [EvaluationsKnexPersist, db],
+          Accounts: [AccountsKnexPersist, db],
         };
         break;
       case 'memory':

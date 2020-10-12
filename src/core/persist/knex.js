@@ -1,4 +1,10 @@
-const { Users, Events, Attributes, Evaluations } = require('../collector');
+const {
+  Users,
+  Events,
+  Attributes,
+  Evaluations,
+  Accounts,
+} = require('../collector');
 
 class KnexPersist {
   constructor(db, class_, table) {
@@ -58,6 +64,19 @@ class UsersKnexPersist extends KnexPersist {
       .orderBy('name', 'desc')
       .first();
   }
+
+  async _create(obj) {
+    try {
+      return await this._db.transaction(async (trx) => {
+        const user_ids = await trx(this._table).insert(obj, 'id');
+        const account = new Accounts(user_ids[0]);
+        await trx('accounts').insert(Accounts.serialize(account));
+      });
+    } catch (e) {
+      console.error('_create user trx: ', e.detail);
+      return e.detail;
+    }
+  }
 }
 
 class EventsKnexPersist extends KnexPersist {
@@ -78,10 +97,17 @@ class EvaluationsKnexPersist extends KnexPersist {
   }
 }
 
+class AccountsKnexPersist extends KnexPersist {
+  constructor(db) {
+    super(db, Accounts, 'accounts');
+  }
+}
+
 module.exports = {
   KnexPersist,
   UsersKnexPersist,
   EventsKnexPersist,
   AttributesKnexPersist,
   EvaluationsKnexPersist,
+  AccountsKnexPersist,
 };

@@ -5,8 +5,8 @@ class EvaluationsStatus {
     return 'active';
   }
 
-  static CANCELLED() {
-    return 'cancelled';
+  static DELETED() {
+    return 'deleted';
   }
 
   static UPDATED() {
@@ -73,4 +73,4 @@ class Evaluations extends PersistedEntity {
   }
 }
 
-module.exports = Evaluations;
+module.exports = { Evaluations, EvaluationsStatus };
