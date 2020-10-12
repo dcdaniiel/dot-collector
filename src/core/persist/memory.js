@@ -21,6 +21,15 @@ class MemoryPersist {
     return this._store[obj_id];
   }
 
+  async getAll() {
+    return Object.values(this._store);
+  }
+
+  async first() {
+    const first = await this.getAll();
+    return first[0];
+  }
+
   async delete(obj_id) {
     const ret = this._store[obj_id] ? 1 : 0;
     delete this._store[obj_id];

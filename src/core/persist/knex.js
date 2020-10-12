@@ -34,6 +34,10 @@ class KnexPersist {
     return this._db.select('*').from(this._table).orderBy('created_at', 'desc');
   }
 
+  async first() {
+    return this._db(this._table).first();
+  }
+
   async _create(obj) {
     return this._db(this._table).insert(obj);
   }

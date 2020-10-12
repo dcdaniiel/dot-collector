@@ -8,7 +8,7 @@ exports.up = function (knex) {
     table.uuid('attribute_id').references('attributes.id');
     table.string('description');
     table.integer('note').notNullable();
-    table.string('status').notNullable().defaultTo('ACTIVE');
+    table.string('status').notNullable();
   });
 };
 

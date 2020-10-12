@@ -1,36 +1,41 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
-const { Evaluations } = require('../index');
+const { Evaluations, User, Attributes, Events } = require('..');
 const { persist_options } = require('../../settings');
 
 beforeEach(async () => {
   await _clean();
+
+  await new User('test', 'a@g.com', '', '').save();
+  await new User('teste2', 'b@g.com', '', '').save();
+  await new Events('eventName').save();
+  await new Attributes('attributeName').save();
 });
 
 afterAll(async () => {
+  await _clean();
   if (persist_options[0] === 'knex') {
-    // await Evaluations.getPersist()._db.destroy();
+    await Evaluations.getPersist()._db.destroy();
   }
 });
 
 describe('Evaluations', () => {
   it('constructor works', async () => {
-    const Evaluation = new Evaluations(
-      '0d6d7370-0c17-11eb-85aa-1da19b01c9c9',
-      '0d6d7371-0c17-11eb-85aa-1da19b01c9c9',
-      '0d6c6200-0c17-11eb-85aa-1da19b01c9c9',
-      9
-    );
+    const Evaluation = new Evaluations();
     Evaluation.description = 'description test';
     expect(Evaluation).toBeInstanceOf(Evaluations);
   });
 
   it('should create a evaluation', async () => {
+    const user = await User.getPersist().getAll();
+    const event = await Events.getPersist().first();
+    const attribute = await Attributes.getPersist().first();
+
     let Evaluation = new Evaluations(
-      '0d6d7370-0c17-11eb-85aa-1da19b01c9c9',
-      '0d6d7371-0c17-11eb-85aa-1da19b01c9c9',
-      '0d6cfe40-0c17-11eb-85aa-1da19b01c9c9',
-      '0d6c6200-0c17-11eb-85aa-1da19b01c9c9',
+      user[0].id,
+      user[1].id,
+      event.id,
+      attribute.id,
       9
     );
     Evaluation.description = 'description test';
@@ -45,5 +50,12 @@ describe('Evaluations', () => {
 const _clean = () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);
   const Evaluation = persistor.getPersistInstance('Evaluations');
+  const Attribute = persistor.getPersistInstance('Attributes');
+  const Event = persistor.getPersistInstance('Events');
+  const UserInstance = persistor.getPersistInstance('Users');
+
   Evaluation.deleteAll();
+  Event.deleteAll();
+  Attribute.deleteAll();
+  UserInstance.deleteAll();
 };
