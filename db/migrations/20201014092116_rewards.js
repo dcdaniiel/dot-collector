@@ -15,6 +15,7 @@ exports.up = function (knex) {
       .notNullable();
     table.string('name').notNullable();
     table.integer('quantity').notNullable();
+    table.timestamp('created_at').notNullable();
   });
 };
 

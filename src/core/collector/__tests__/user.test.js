@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
-const { Users, Accounts } = require('..');
+const { User, Account } = require('..');
 const { persist_options } = require('../../settings');
 
 beforeEach(async () => {
@@ -10,51 +10,51 @@ beforeEach(async () => {
 afterAll(async () => {
   await _clean();
   if (persist_options[0] === 'knex') {
-    await Users.getPersist()._db.destroy();
+    await User.getPersist()._db.destroy();
   }
 });
 
 describe('User', () => {
   it('constructor works', async () => {
-    const user = new Users('testName', 'testEmail@t.com', '2020-09-01', '123');
-    expect(user).toBeInstanceOf(Users);
+    const user = new User('testName', 'testEmail@t.com', '2020-09-01', '123');
+    expect(user).toBeInstanceOf(User);
   });
 
   it('save user', async () => {
-    const user = new Users('testName', 'testEmail@t.com', '2020-09-01', '123');
+    const user = new User('testName', 'testEmail@t.com', '2020-09-01', '123');
     const saved_user = await user.save();
 
     expect(saved_user.id).toBe(user.id);
   });
 
   it('fetch user', async () => {
-    let user = new Users('testName', 'testEmail@t.com', '2020-09-01', '123');
-    user = await user.save();
+    let usr = new User('testName', 'testEmail@t.com', '2020-09-01', '123');
+    usr = await usr.save();
 
-    let fetchUser = await Users.fetch(user.id);
-    expect(fetchUser._id).toBe(user.id);
-    await Users.delete(user.id);
-    fetchUser = await Users.fetch(user.id);
+    let fetchUser = await User.fetch(usr.id);
+    expect(fetchUser._id).toBe(usr.id);
+    await User.delete(usr.id);
+    fetchUser = await User.fetch(usr.id);
     expect(fetchUser).toBeFalsy();
   });
 
   it('delete user', async () => {
-    let user = new Users('testName', 'testEmail@t.com', '2020-09-01', '123');
+    let user = new User('testName', 'testEmail@t.com', '2020-09-01', '123');
     user = await user.save();
 
-    let fetched_user = await Users.fetch(user.id);
+    let fetched_user = await User.fetch(user.id);
 
     expect(fetched_user._id).toBe(user.id);
-    await Users.delete(user.id);
-    fetched_user = await Users.fetch(user.id);
+    await User.delete(user.id);
+    fetched_user = await User.fetch(user.id);
     expect(fetched_user).toBeFalsy();
   });
 
   it('should create a user and account with user id', async () => {
-    let user = new Users('testName', 'test@test.com', '', '');
+    let user = new User('testName', 'test@test.com', '', '');
     user = await user.save();
 
-    let account = await new Accounts().getPersist();
+    let account = await new Account().getPersist();
     account = await account.getAccountUser(user.id);
 
     expect(user.id).toBe(account.user_id);

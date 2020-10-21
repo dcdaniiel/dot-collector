@@ -175,6 +175,26 @@ class AccountsMemoryPersist extends MemoryPersist {
   }
 }
 
+class TransfersMemoryPersist extends MemoryPersist {
+  get instance() {
+    return this._instance;
+  }
+
+  set instance(instance) {
+    this._instance = instance;
+  }
+
+  constructor() {
+    super(Accounts);
+
+    if (TransfersMemoryPersist.instance) {
+      return TransfersMemoryPersist.instance;
+    }
+
+    TransfersMemoryPersist.instance = this;
+  }
+}
+
 module.exports = {
   MemoryPersist,
   UsersMemoryPersist,
@@ -182,4 +202,5 @@ module.exports = {
   AttributesMemoryPersist,
   EvaluationsMemoryPersist,
   AccountsMemoryPersist,
+  TransfersMemoryPersist,
 };

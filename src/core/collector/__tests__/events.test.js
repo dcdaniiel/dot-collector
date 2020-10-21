@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
-const { Events } = require('../index');
+const { Event } = require('../index');
 const { persist_options } = require('../../settings');
 
 beforeEach(async () => {
@@ -9,49 +9,49 @@ beforeEach(async () => {
 
 afterAll(async () => {
   if (persist_options[0] === 'knex') {
-    await Events.getPersist()._db.destroy();
+    await Event.getPersist()._db.destroy();
   }
 });
 
 describe('Events', () => {
   it('constructor works', async () => {
-    const Event = new Events('testEvent');
-    expect(Event).toBeInstanceOf(Events);
+    const evt = new Event('testEvent');
+    expect(evt).toBeInstanceOf(Event);
   });
 
   it('save Event', async () => {
-    const Event = new Events('testEvent');
-    const saved_Event = await Event.save();
+    const evt = new Event('testEvent');
+    const saved_Event = await evt.save();
 
-    expect(saved_Event.id).toBe(Event.id);
+    expect(saved_Event.id).toBe(evt.id);
   });
 
   it('fetch Event', async () => {
-    let Event = new Events('testEvent');
-    Event = await Event.save();
+    let evt = new Event('testEvent');
+    evt = await evt.save();
 
-    let fetchUser = await Events.fetch(Event.id);
-    expect(fetchUser._id).toBe(Event.id);
-    await Events.delete(Event.id);
-    fetchUser = await Events.fetch(Event.id);
+    let fetchUser = await Event.fetch(evt.id);
+    expect(fetchUser._id).toBe(evt.id);
+    await Event.delete(evt.id);
+    fetchUser = await Event.fetch(evt.id);
     expect(fetchUser).toBeFalsy();
   });
 
   it('delete Event', async () => {
-    let Event = new Events('testEvent');
-    Event = await Event.save();
+    let evt = new Event('testEvent');
+    evt = await evt.save();
 
-    let fetched_Event = await Events.fetch(Event.id);
+    let fetched_Event = await Event.fetch(evt.id);
 
-    expect(fetched_Event._id).toBe(Event.id);
-    await Events.delete(Event.id);
-    fetched_Event = await Events.fetch(Event.id);
+    expect(fetched_Event._id).toBe(evt.id);
+    await Event.delete(evt.id);
+    fetched_Event = await Event.fetch(evt.id);
     expect(fetched_Event).toBeFalsy();
   });
 });
 
 const _clean = () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);
-  const Event = persistor.getPersistInstance('Events');
-  Event.deleteAll();
+  const evt = persistor.getPersistInstance('Events');
+  evt.deleteAll();
 };

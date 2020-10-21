@@ -1,94 +1,82 @@
 const { PersistorProvider } = require('../../persist/provider');
-const {
-  Evaluations,
-  EvaluationsStatus,
-  Users,
-  Attributes,
-  Events,
-} = require('..');
+const { Evaluation, EvaluationsStatus, User, Attribute, Event } = require('..');
 const { persist_options } = require('../../settings');
 
 const _clean = () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);
-  const Evaluation = persistor.getPersistInstance('Evaluations');
-  const Attribute = persistor.getPersistInstance('Attributes');
-  const Event = persistor.getPersistInstance('Events');
-  const UserInstance = persistor.getPersistInstance('Users');
-  const Account = persistor.getPersistInstance('Accounts');
+  const evalt = persistor.getPersistInstance('Evaluations');
+  const attr = persistor.getPersistInstance('Attributes');
+  const evnt = persistor.getPersistInstance('Events');
+  const usr = persistor.getPersistInstance('Users');
+  const acc = persistor.getPersistInstance('Accounts');
 
-  Account.deleteAll();
-  Evaluation.deleteAll();
-  Event.deleteAll();
-  Attribute.deleteAll();
-  UserInstance.deleteAll();
+  evalt.deleteAll();
+  attr.deleteAll();
+  evnt.deleteAll();
+  usr.deleteAll();
+  acc.deleteAll();
 };
 
 beforeEach(async () => {
   await _clean();
 
-  await new Users('test', 'a@g.com', '', '').save();
-  await new Users('teste2', 'b@g.com', '', '').save();
-  await new Events('eventName').save();
-  await new Attributes('attributeName').save();
+  await new User('test', 'a@g.com', '', '').save();
+  await new User('teste2', 'b@g.com', '', '').save();
+  await new Event('eventName').save();
+  await new Attribute('attributeName').save();
 });
 
 afterAll(async () => {
   await _clean();
   if (persist_options[0] === 'knex') {
-    await Evaluations.getPersist()._db.destroy();
+    await Evaluation.getPersist()._db.destroy();
   }
 });
 
 describe('Evaluations', () => {
   it('constructor works', async () => {
-    const Evaluation = new Evaluations();
-    Evaluation.description = 'description test';
-    expect(Evaluation).toBeInstanceOf(Evaluations);
+    const evals = new Evaluation();
+    evals.description = 'description test';
+    expect(evals).toBeInstanceOf(Evaluation);
   });
 
   it('should create a evaluation', async () => {
-    const user = await Users.getPersist().getAll();
-    const event = await Events.getPersist().first();
-    const attribute = await Attributes.getPersist().first();
+    const usr = await User.getPersist().getAll();
+    const event = await Event.getPersist().first();
+    const attribute = await Attribute.getPersist().first();
 
-    let Evaluation = new Evaluations(
-      user[0].id,
-      user[1].id,
-      event.id,
-      attribute.id,
-      9
-    );
-    Evaluation.description = 'description test';
-    Evaluation = await Evaluation.save();
+    let evals = new Evaluation(usr[0].id, usr[1].id, event.id, attribute.id, 9);
+    evals.description = 'description test';
+    evals = await evals.save();
 
-    const fetched = await Evaluations.fetch(Evaluation.id);
+    const fetched = await Evaluation.fetch(evals.id);
 
-    expect(Evaluation.id).toBe(fetched.id);
+    expect(evals.id).toBe(fetched.id);
   });
 
   it('should delete a evaluation', async () => {
-    const user = await Users.getPersist().getAll();
-    const event = await Events.getPersist().first();
-    const attribute = await Attributes.getPersist().first();
+    const user = await User.getPersist().getAll();
+    const event = await Event.getPersist().first();
+    const attribute = await Attribute.getPersist().first();
 
-    let Evaluation = new Evaluations(
+    let evals = new Evaluation(
       user[0].id,
       user[1].id,
       event.id,
       attribute.id,
       9
     );
-    Evaluation.description = 'description test';
-    Evaluation = await Evaluation.save();
+    evals.description = 'description test';
+    evals = await evals.save();
 
-    const fetched = await Evaluations.fetch(Evaluation.id);
+    const fetched = await Evaluation.fetch(evals.id);
 
-    expect(Evaluation.id).toBe(fetched.id);
-    expect(Evaluation._status).toBe(EvaluationsStatus.ACTIVE());
+    expect(evals.id).toBe(fetched.id);
+    expect(evals._status).toBe(EvaluationsStatus.ACTIVE());
 
-    Evaluation.status = EvaluationsStatus.DELETED();
-    Evaluation = await Evaluation.save();
+    evals.status = EvaluationsStatus.DELETED();
+    evals = await evals.save();
 
-    expect(Evaluation._status).toBe(EvaluationsStatus.DELETED());
+    expect(evals._status).toBe(EvaluationsStatus.DELETED());
   });
 });

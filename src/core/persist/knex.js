@@ -1,9 +1,11 @@
 const {
-  Users,
-  Events,
-  Attributes,
-  Evaluations,
-  Accounts,
+  User,
+  Event,
+  Attribute,
+  Evaluation,
+  Account,
+  Transfer,
+  Coin,
 } = require('../collector');
 
 class KnexPersist {
@@ -55,7 +57,7 @@ class KnexPersist {
 
 class UsersKnexPersist extends KnexPersist {
   constructor(db) {
-    super(db, Users, 'users');
+    super(db, User, 'users');
   }
 
   async getByName(obj_name) {
@@ -69,8 +71,8 @@ class UsersKnexPersist extends KnexPersist {
     try {
       return await this._db.transaction(async (trx) => {
         const user_ids = await trx(this._table).insert(obj, 'id');
-        const account = new Accounts(user_ids[0]);
-        await trx('accounts').insert(Accounts.serialize(account));
+        const account = new Account(user_ids[0]);
+        await trx('accounts').insert(Account.serialize(account));
       });
     } catch (e) {
       console.log('_create user trx: ', e.detail);
@@ -81,29 +83,70 @@ class UsersKnexPersist extends KnexPersist {
 
 class EventsKnexPersist extends KnexPersist {
   constructor(db) {
-    super(db, Events, 'events');
+    super(db, Event, 'events');
   }
 }
 
 class AttributesKnexPersist extends KnexPersist {
   constructor(db) {
-    super(db, Attributes, 'attributes');
+    super(db, Attribute, 'attributes');
   }
 }
 
 class EvaluationsKnexPersist extends KnexPersist {
   constructor(db) {
-    super(db, Evaluations, 'evaluations');
+    super(db, Evaluation, 'evaluations');
   }
 }
 
 class AccountsKnexPersist extends KnexPersist {
   constructor(db) {
-    super(db, Accounts, 'accounts');
+    super(db, Account, 'accounts');
   }
 
   getAccountUser(user_id) {
     return this._db(this._table).where('user_id', user_id).first();
+  }
+}
+
+class TransfersKnexPersist extends KnexPersist {
+  constructor(db) {
+    super(db, Transfer, 'transfers');
+  }
+
+  async _create(obj) {
+    try {
+      return await this._db.transaction(async (trx) => {
+        const { from_account, to_account } = obj;
+
+        const from = await this._db('accounts')
+          .where('id', from_account)
+          .first();
+
+        const to = await this._db('accounts').where('id', to_account).first();
+
+        if (!to || !from) {
+          return 'Account not exists';
+        }
+
+        if (from_account === to_account) {
+          return 'Accounts can not equals';
+        }
+
+        await trx(this._table).insert(obj);
+
+        return 'Transfer created.';
+      });
+    } catch (e) {
+      console.log('ERROR create transfer: ', e);
+      return `Error ${e}`;
+    }
+  }
+}
+
+class CoinsKnexPersist extends KnexPersist {
+  constructor(db) {
+    super(db, Coin, 'coins');
   }
 }
 
@@ -114,4 +157,6 @@ module.exports = {
   AttributesKnexPersist,
   EvaluationsKnexPersist,
   AccountsKnexPersist,
+  TransfersKnexPersist,
+  CoinsKnexPersist,
 };

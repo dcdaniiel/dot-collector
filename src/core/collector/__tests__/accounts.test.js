@@ -1,14 +1,14 @@
 const { PersistorProvider } = require('../../persist/provider');
-const { Accounts, Users } = require('../index');
+const { Account, User } = require('../index');
 const { persist_options } = require('../../settings');
 
 const _clean = async () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);
-  const Account = persistor.getPersistInstance('Accounts');
-  const User = persistor.getPersistInstance('Users');
+  const acc = persistor.getPersistInstance('Accounts');
+  const usr = persistor.getPersistInstance('Users');
 
-  // await Account.deleteAll();
-  // await User.deleteAll();
+  await acc.deleteAll();
+  await usr.deleteAll();
 };
 
 beforeEach(async () => {
@@ -17,28 +17,46 @@ beforeEach(async () => {
 
 afterAll(async () => {
   if (persist_options[0] === 'knex') {
-    await Accounts.getPersist()._db.destroy();
+    await Account.getPersist()._db.destroy();
   }
 });
 
 describe('Accounts', () => {
   it('constructor works', async () => {
-    const acc = new Accounts('testeAcc');
-    expect(acc).toBeInstanceOf(Accounts);
+    const acc = new Account('testeAcc');
+    expect(acc).toBeInstanceOf(Account);
   });
 
   it('create a account', async () => {
-    const user = await new Users('test', 'a@a.com', '', '').save();
-    const acc = await Accounts.getPersist().getAccountUser(user.id);
+    const user = await new User('test', 'a@a.com', '', '').save();
+    const acc = await Account.getPersist().getAccountUser(user.id);
 
     expect(acc.user_id).toBe(user.id);
   });
 
-  it(`don't create user duplicated`, async () => {
-    await new Users('test', 'a@a.com', '', '').save();
-    let user = await new Users('TESTE_2', 'a@a.com', '', '').save();
-    user = await Users.getPersist().get(user.id);
+  it('delete a account', async () => {
+    const user = await new User('test', 'a@a.com', '', '').save();
+    const accPersist = await Account.getPersist();
 
-    expect(user).toBeFalsy();
+    const acc = await accPersist.getAccountUser(user.id);
+    expect(acc.user_id).toBe(user.id);
+
+    let accDel = await accPersist.delete(acc.id);
+    accDel = await accPersist.get(acc.id);
+    expect(accDel).toBeFalsy();
+  });
+
+  it('cascade account user', async () => {
+    const user = await new User('test', 'a@a.com', '', '').save();
+    const accPersist = await Account.getPersist();
+
+    const acc = await accPersist.getAccountUser(user.id);
+    expect(acc.user_id).toBe(user.id);
+
+    await User.delete(user.id);
+
+    const accDel = await accPersist.getAccountUser(user.id);
+
+    expect(accDel).toBeFalsy();
   });
 });

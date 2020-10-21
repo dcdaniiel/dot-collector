@@ -4,6 +4,8 @@ const {
   AttributesKnexPersist,
   EvaluationsKnexPersist,
   AccountsKnexPersist,
+  TransfersKnexPersist,
+  CoinsKnexPersist,
 } = require('./knex');
 const {
   UsersMemoryPersist,
@@ -11,6 +13,7 @@ const {
   AttributesMemoryPersist,
   EvaluationsMemoryPersist,
   AccountsMemoryPersist,
+  TransfersMemoryPersist,
 } = require('./memory');
 const { PersistorSingleton } = require('./persist');
 
@@ -30,6 +33,8 @@ class PersistorProvider {
           Attributes: [AttributesKnexPersist, db],
           Evaluations: [EvaluationsKnexPersist, db],
           Accounts: [AccountsKnexPersist, db],
+          Transfers: [TransfersKnexPersist, db],
+          Coins: [CoinsKnexPersist, db],
         };
         break;
       case 'memory':
@@ -39,6 +44,7 @@ class PersistorProvider {
           Attributes: [AttributesMemoryPersist],
           Evaluations: [EvaluationsMemoryPersist],
           Accounts: [AccountsMemoryPersist],
+          Transfers: [TransfersMemoryPersist],
         };
         break;
       default:

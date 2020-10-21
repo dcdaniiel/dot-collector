@@ -13,8 +13,10 @@ exports.up = function (knex) {
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
       .notNullable();
+    table.string('type').notNullable();
     table.string('description');
     table.integer('value').notNullable();
+    table.timestamp('created_at').notNullable();
   });
 };
 
