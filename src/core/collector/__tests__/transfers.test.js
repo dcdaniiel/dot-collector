@@ -1,5 +1,5 @@
 const { PersistorProvider } = require('../../persist/provider');
-const { Transfer, Account, User } = require('..');
+const { Transfer, TransferTypes, Account, User } = require('..');
 const { persist_options } = require('../../settings');
 
 const _clean = async () => {
@@ -37,6 +37,7 @@ describe('Transfers', () => {
     const data = await new Transfer(
       accA.id,
       accB.id,
+      TransferTypes.COINS(),
       10,
       'description text'
     ).save();

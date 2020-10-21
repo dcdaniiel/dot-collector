@@ -129,12 +129,10 @@ class TransfersKnexPersist extends KnexPersist {
         }
 
         if (from_account === to_account) {
-          return 'Accounts can not equals';
+          return 'Accounts cannot equals';
         }
 
-        await trx(this._table).insert(obj);
-
-        return 'Transfer created.';
+        return trx(this._table).insert(obj, 'id');
       });
     } catch (e) {
       return `Error ${e}`;

@@ -1,5 +1,15 @@
 const { PersistedEntity } = require('../base');
 
+class TransferTypes {
+  static COINS() {
+    return 'coins';
+  }
+
+  static REWARDS() {
+    return 'rewards';
+  }
+}
+
 class Transfers extends PersistedEntity {
   static getEntityClass() {
     return Transfers;
@@ -11,6 +21,7 @@ class Transfers extends PersistedEntity {
       created_at: transfer._created_at,
       from_account: transfer._from_account,
       to_account: transfer._to_account,
+      type: transfer._type,
       value: transfer._value,
       description: transfer._description,
     };
@@ -32,11 +43,12 @@ class Transfers extends PersistedEntity {
     return undefined;
   }
 
-  constructor(from_account, to_account, value, description) {
+  constructor(from_account, to_account, type, value, description) {
     super();
 
     this._from_account = from_account;
     this._to_account = to_account;
+    this._type = type;
     this._value = value;
     this._description = description;
   }
@@ -49,6 +61,10 @@ class Transfers extends PersistedEntity {
     return this._from_account;
   }
 
+  get type() {
+    return this._type;
+  }
+
   get value() {
     return this._value;
   }
@@ -58,4 +74,4 @@ class Transfers extends PersistedEntity {
   }
 }
 
-module.exports = Transfers;
+module.exports = { Transfers, TransferTypes };

@@ -3,7 +3,7 @@ const Events = require('./events');
 const Attributes = require('./attributes');
 const { Evaluations, EvaluationsStatus } = require('./evaluations');
 const Accounts = require('./accounts');
-const Transfers = require('./transfer');
+const { Transfers, TransferTypes } = require('./transfer');
 const Coins = require('./coins');
 
 module.exports = {
@@ -14,5 +14,6 @@ module.exports = {
   Account: Accounts,
   Transfer: Transfers,
   Coin: Coins,
+  TransferTypes,
   EvaluationsStatus,
 };
