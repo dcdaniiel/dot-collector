@@ -46,17 +46,19 @@ describe('Accounts', () => {
     expect(accDel).toBeFalsy();
   });
 
-  it('cascade account user', async () => {
-    const user = await new User('test', 'a@a.com', '', '').save();
-    const accPersist = await Account.getPersist();
+  if (persist_options[0] === 'knex') {
+    it('cascade account user', async () => {
+      const user = await new User('test', 'a@a.com', '', '').save();
+      const accPersist = await Account.getPersist();
 
-    const acc = await accPersist.getAccountUser(user.id);
-    expect(acc.user_id).toBe(user.id);
+      const acc = await accPersist.getAccountUser(user.id);
+      expect(acc.user_id).toBe(user.id);
 
-    await User.delete(user.id);
+      await User.delete(user.id);
 
-    const accDel = await accPersist.getAccountUser(user.id);
+      const accDel = await accPersist.getAccountUser(user.id);
 
-    expect(accDel).toBeFalsy();
-  });
+      expect(accDel).toBeFalsy();
+    });
+  }
 });

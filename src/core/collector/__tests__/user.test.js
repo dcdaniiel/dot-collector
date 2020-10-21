@@ -1,7 +1,16 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
-const { User, Account } = require('..');
+const { User, Account } = require('../index');
 const { persist_options } = require('../../settings');
+
+const _clean = async () => {
+  const persistor = PersistorProvider.getPersistor(...persist_options);
+  const user = persistor.getPersistInstance('Users');
+  const account = persistor.getPersistInstance('Accounts');
+
+  await account.deleteAll();
+  await user.deleteAll();
+};
 
 beforeEach(async () => {
   await _clean();
@@ -60,12 +69,3 @@ describe('User', () => {
     expect(user.id).toBe(account.user_id);
   });
 });
-
-const _clean = async () => {
-  const persistor = PersistorProvider.getPersistor(...persist_options);
-  const user = persistor.getPersistInstance('Users');
-  const account = persistor.getPersistInstance('Accounts');
-
-  await account.deleteAll();
-  await user.deleteAll();
-};

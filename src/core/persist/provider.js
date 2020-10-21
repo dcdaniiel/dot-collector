@@ -14,6 +14,7 @@ const {
   EvaluationsMemoryPersist,
   AccountsMemoryPersist,
   TransfersMemoryPersist,
+  CoinsMemoryPersist,
 } = require('./memory');
 const { PersistorSingleton } = require('./persist');
 
@@ -45,6 +46,7 @@ class PersistorProvider {
           Evaluations: [EvaluationsMemoryPersist],
           Accounts: [AccountsMemoryPersist],
           Transfers: [TransfersMemoryPersist],
+          Coins: [CoinsMemoryPersist],
         };
         break;
       default:

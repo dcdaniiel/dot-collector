@@ -1,11 +1,13 @@
 const _ = require('lodash');
 const assert = require('assert');
 const {
-  Users,
-  Events,
-  Attributes,
-  Evaluations,
-  Accounts,
+  User,
+  Event,
+  Attribute,
+  Evaluation,
+  Account,
+  Transfer,
+  Coin,
 } = require('../collector');
 
 class MemoryPersist {
@@ -69,7 +71,7 @@ class UsersMemoryPersist extends MemoryPersist {
   }
 
   constructor() {
-    super(Users);
+    super(User);
     if (UsersMemoryPersist.instance) {
       return UsersMemoryPersist.instance;
     }
@@ -85,7 +87,7 @@ class UsersMemoryPersist extends MemoryPersist {
     try {
       if (!verifyEmailDuplicated.length) {
         this._store[obj.id] = _.cloneDeep(obj);
-        await new Accounts(obj.id).save();
+        await new Account(obj.id).save();
       }
     } catch (e) {
       console.log('user _create: ', e);
@@ -103,7 +105,7 @@ class EventsMemoryPersist extends MemoryPersist {
   }
 
   constructor() {
-    super(Events);
+    super(Event);
     if (EventsMemoryPersist.instance) {
       return EventsMemoryPersist.instance;
     }
@@ -122,7 +124,7 @@ class AttributesMemoryPersist extends MemoryPersist {
   }
 
   constructor() {
-    super(Attributes);
+    super(Attribute);
     if (AttributesMemoryPersist.instance) {
       return AttributesMemoryPersist.instance;
     }
@@ -141,7 +143,7 @@ class EvaluationsMemoryPersist extends MemoryPersist {
   }
 
   constructor() {
-    super(Evaluations);
+    super(Evaluation);
 
     if (EvaluationsMemoryPersist.instance) {
       return EvaluationsMemoryPersist.instance;
@@ -161,7 +163,7 @@ class AccountsMemoryPersist extends MemoryPersist {
   }
 
   constructor() {
-    super(Accounts);
+    super(Account);
 
     if (AccountsMemoryPersist.instance) {
       return AccountsMemoryPersist.instance;
@@ -185,13 +187,33 @@ class TransfersMemoryPersist extends MemoryPersist {
   }
 
   constructor() {
-    super(Accounts);
+    super(Transfer);
 
     if (TransfersMemoryPersist.instance) {
       return TransfersMemoryPersist.instance;
     }
 
     TransfersMemoryPersist.instance = this;
+  }
+}
+
+class CoinsMemoryPersist extends MemoryPersist {
+  get instance() {
+    return this._instance;
+  }
+
+  set instance(instance) {
+    this._instance = instance;
+  }
+
+  constructor() {
+    super(Coin);
+
+    if (CoinsMemoryPersist.instance) {
+      return CoinsMemoryPersist.instance;
+    }
+
+    CoinsMemoryPersist.instance = this;
   }
 }
 
@@ -203,4 +225,5 @@ module.exports = {
   EvaluationsMemoryPersist,
   AccountsMemoryPersist,
   TransfersMemoryPersist,
+  CoinsMemoryPersist,
 };

@@ -75,7 +75,6 @@ class UsersKnexPersist extends KnexPersist {
         await trx('accounts').insert(Account.serialize(account));
       });
     } catch (e) {
-      console.log('_create user trx: ', e.detail);
       return e.detail;
     }
   }
@@ -138,7 +137,6 @@ class TransfersKnexPersist extends KnexPersist {
         return 'Transfer created.';
       });
     } catch (e) {
-      console.log('ERROR create transfer: ', e);
       return `Error ${e}`;
     }
   }
