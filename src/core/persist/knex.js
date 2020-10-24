@@ -5,6 +5,7 @@ const {
   Evaluation,
   Account,
   Transfer,
+  TransferTypes,
   Coin,
 } = require('../collector');
 
@@ -56,6 +57,10 @@ class KnexPersist {
 }
 
 class UsersKnexPersist extends KnexPersist {
+  get _initial_coins() {
+    return 50;
+  }
+
   constructor(db) {
     super(db, User, 'users');
   }
@@ -70,9 +75,15 @@ class UsersKnexPersist extends KnexPersist {
   async _create(obj) {
     try {
       return await this._db.transaction(async (trx) => {
-        const user_ids = await trx(this._table).insert(obj, 'id');
-        const account = new Account(user_ids[0]);
-        await trx('accounts').insert(Account.serialize(account));
+        const [user_id] = await trx(this._table).insert(obj, 'id');
+        const [id] = await trx('accounts').insert(
+          Account.serialize(new Account(user_id)),
+          'id'
+        );
+        return trx('coins').insert(
+          Coin.serialize(new Coin(id, null, this._initial_coins)),
+          '*'
+        );
       });
     } catch (e) {
       return e.detail;
@@ -116,15 +127,17 @@ class TransfersKnexPersist extends KnexPersist {
   async _create(obj) {
     try {
       return await this._db.transaction(async (trx) => {
-        const { from_account, to_account } = obj;
+        const { from_account, to_account, value, type } = obj;
 
-        const from = await this._db('accounts')
+        const fromEntity = await this._db('accounts')
           .where('id', from_account)
           .first();
 
-        const to = await this._db('accounts').where('id', to_account).first();
+        const toEntity = await this._db('accounts')
+          .where('id', to_account)
+          .first();
 
-        if (!to || !from) {
+        if (!fromEntity || !toEntity) {
           return 'Account not exists';
         }
 
@@ -132,7 +145,38 @@ class TransfersKnexPersist extends KnexPersist {
           return 'Accounts cannot equals';
         }
 
-        return trx(this._table).insert(obj, 'id');
+        const fromCoinsData = await this._db('coins')
+          .where('author_id', from_account)
+          .first();
+
+        const toCoinsData = await this._db('coins')
+          .where('author_id', to_account)
+          .first();
+
+        if (type === TransferTypes.COINS()) {
+          if (value > fromCoinsData.quantity) {
+            return 'You not have coins sufficiently.';
+          }
+
+          const [id] = await trx(this._table).insert(obj, 'id');
+
+          const coinFrom = new Coin(
+            fromEntity.id,
+            id,
+            fromCoinsData.quantity - value
+          );
+          const coinTo = new Coin(
+            toEntity.id,
+            id,
+            toCoinsData.quantity + value
+          );
+
+          await trx('coins').insert(Coin.serialize(coinFrom));
+          await trx('coins').insert(Coin.serialize(coinTo));
+        }
+        // if (type === TransferTypes.REWARDS()) {
+        //   const [id] = await trx(this._table).insert(obj, 'id');
+        // }
       });
     } catch (e) {
       return `Error ${e}`;

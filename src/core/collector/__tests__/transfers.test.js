@@ -28,8 +28,8 @@ describe('Transfers', () => {
   });
 
   it('create a transfer', async () => {
-    const userA = await new User('test', 'd@a.com', '', '').save();
-    const userB = await new User('test', 'b@com', '', '').save();
+    const userA = await new User('test', 't@a.com', '', '').save();
+    const userB = await new User('test', 'g@com', '', '').save();
 
     const accA = await Account.getPersist().getAccountUser(userA.id);
     const accB = await Account.getPersist().getAccountUser(userB.id);
