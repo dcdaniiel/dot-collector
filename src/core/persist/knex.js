@@ -7,6 +7,7 @@ const {
   Transfer,
   TransferTypes,
   Coin,
+  Reward,
 } = require('../collector');
 
 class KnexPersist {
@@ -129,6 +130,10 @@ class TransfersKnexPersist extends KnexPersist {
       return await this._db.transaction(async (trx) => {
         const { from_account, to_account, value, type } = obj;
 
+        if (from_account === to_account) {
+          return 'Accounts cannot equals';
+        }
+
         const fromEntity = await this._db('accounts')
           .where('id', from_account)
           .first();
@@ -141,19 +146,15 @@ class TransfersKnexPersist extends KnexPersist {
           return 'Account not exists';
         }
 
-        if (from_account === to_account) {
-          return 'Accounts cannot equals';
-        }
-
-        const fromCoinsData = await this._db('coins')
-          .where('author_id', from_account)
-          .first();
-
         const toCoinsData = await this._db('coins')
           .where('author_id', to_account)
           .first();
 
         if (type === TransferTypes.COINS()) {
+          const fromCoinsData = await this._db('coins')
+            .where('author_id', from_account)
+            .first();
+
           if (value > fromCoinsData.quantity) {
             return 'You not have coins sufficiently.';
           }
@@ -173,10 +174,38 @@ class TransfersKnexPersist extends KnexPersist {
 
           await trx('coins').insert(Coin.serialize(coinFrom));
           await trx('coins').insert(Coin.serialize(coinTo));
+
+          return 'Transfer success.';
         }
-        // if (type === TransferTypes.REWARDS()) {
-        //   const [id] = await trx(this._table).insert(obj, 'id');
-        // }
+
+        if (type === TransferTypes.REWARDS()) {
+          const { quantity, name } = await this._db('rewards')
+            .where('id', value)
+            .first();
+
+          if (toCoinsData.quantity > quantity) {
+            const [id] = await trx(this._table).insert(
+              { ...obj, value: 0 },
+              'id'
+            );
+
+            try {
+              const data = await trx('rewards').insert(
+                Reward.serialize(new Reward(to_account, id, name, quantity)),
+                '*'
+              );
+              console.log('TESTE:::', data);
+            } catch (e) {
+              console.log('TESTE:::', e);
+            }
+
+            return 'Success on get the reward.';
+          }
+
+          return new Error('You not have coins for this reward.');
+        }
+
+        return new Error('Type of undefined');
       });
     } catch (e) {
       return `Error ${e}`;
@@ -190,6 +219,12 @@ class CoinsKnexPersist extends KnexPersist {
   }
 }
 
+class RewardsKnexPersist extends KnexPersist {
+  constructor(db) {
+    super(db, Reward, 'rewards');
+  }
+}
+
 module.exports = {
   KnexPersist,
   UsersKnexPersist,
@@ -199,4 +234,5 @@ module.exports = {
   AccountsKnexPersist,
   TransfersKnexPersist,
   CoinsKnexPersist,
+  RewardsKnexPersist,
 };

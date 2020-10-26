@@ -6,6 +6,7 @@ const {
   AccountsKnexPersist,
   TransfersKnexPersist,
   CoinsKnexPersist,
+  RewardsKnexPersist,
 } = require('./knex');
 const {
   UsersMemoryPersist,
@@ -36,6 +37,7 @@ class PersistorProvider {
           Accounts: [AccountsKnexPersist, db],
           Transfers: [TransfersKnexPersist, db],
           Coins: [CoinsKnexPersist, db],
+          Rewards: [RewardsKnexPersist, db],
         };
         break;
       case 'memory':

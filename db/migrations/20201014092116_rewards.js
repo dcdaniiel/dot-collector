@@ -11,8 +11,7 @@ exports.up = function (knex) {
       .uuid('transfer_id')
       .references('transfers.id')
       .onUpdate('CASCADE')
-      .onDelete('CASCADE')
-      .notNullable();
+      .onDelete('CASCADE');
     table.string('name').notNullable();
     table.integer('quantity').notNullable();
     table.timestamp('created_at').notNullable();
