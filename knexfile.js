@@ -1,6 +1,6 @@
 const path = require('path');
 
-const BASE_PATH = path.join(__dirname, 'db');
+const BASE_PATH = path.join(__dirname, 'src/db');
 
 module.exports = {
   development: {

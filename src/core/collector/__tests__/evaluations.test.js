@@ -1,6 +1,6 @@
 const { PersistorProvider } = require('../../persist/provider');
 const { Evaluation, EvaluationsStatus, User, Attribute, Event } = require('..');
-const { persist_options } = require('../../settings');
+const { persist_options } = require('../../../../settings/persist_options');
 
 const _clean = () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);

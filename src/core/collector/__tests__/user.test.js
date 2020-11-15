@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
 const { User, Account } = require('../index');
-const { persist_options } = require('../../settings');
+const { persist_options } = require('../../../../settings/persist_options');
 
 const _clean = async () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);

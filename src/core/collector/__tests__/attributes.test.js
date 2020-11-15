@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const { PersistorProvider } = require('../../persist/provider');
 const { Attribute } = require('../index');
-const { persist_options } = require('../../settings');
+const { persist_options } = require('../../../../settings/persist_options');
 
 beforeEach(async () => {
   await _clean();
