@@ -1,3 +1,5 @@
+const bcryptjs = require('bcryptjs');
+
 const {
   User,
   Event,
@@ -74,21 +76,23 @@ class UsersKnexPersist extends KnexPersist {
   }
 
   async _create(obj) {
-    try {
-      return await this._db.transaction(async (trx) => {
-        const [user_id] = await trx(this._table).insert(obj, 'id');
-        const [id] = await trx('accounts').insert(
-          Account.serialize(new Account(user_id)),
-          'id'
-        );
-        return trx('coins').insert(
-          Coin.serialize(new Coin(id, null, this._initial_coins)),
-          '*'
-        );
-      });
-    } catch (e) {
-      return e.detail;
-    }
+    return this._db.transaction(async (trx) => {
+      const password = await bcryptjs.hash(obj.password, 10);
+      const [user_id] = await trx(this._table).insert(
+        { ...obj, password },
+        'id'
+      );
+      const [id] = await trx('accounts').insert(
+        Account.serialize(new Account(user_id)),
+        'id'
+      );
+      await trx('coins').insert(
+        Coin.serialize(new Coin(id, null, this._initial_coins)),
+        '*'
+      );
+
+      return 'created!';
+    });
   }
 }
 

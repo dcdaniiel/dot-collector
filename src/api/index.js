@@ -2,6 +2,8 @@ const Koa = require('koa');
 const cors = require('@koa/cors');
 const logger = require('koa-logger');
 const router = require('./routes');
+const { PersistorProvider } = require('../core/persist/provider');
+const { persist_options } = require('../../settings/persist_options');
 
 const middlewares = require('./middlewares');
 
@@ -11,8 +13,10 @@ const corsOptions = {
   allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
 };
 
-const server = async (port, persist_mode = 'memory') => {
+const server = async (port) => {
   const app = new Koa();
+
+  PersistorProvider.getPersistor(...persist_options);
 
   const routes = router({
     middlewares: [],

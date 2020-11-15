@@ -5,10 +5,13 @@ module.exports = function UserController() {
     async create(ctx) {
       try {
         const { body } = ctx.request;
-        const user = UserService().create(body);
-        console.log('USER::: ', user);
+
+        ctx.body = await UserService().create(body);
+        ctx.status = 200;
       } catch (e) {
-        console.log('ERROR::: ', e);
+        console.error(e.detail);
+        ctx.body = e.detail;
+        ctx.status = 400;
       }
     },
   };

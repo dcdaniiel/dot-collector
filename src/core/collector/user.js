@@ -1,4 +1,4 @@
-const { createHash } = require('crypto');
+const bcrypt = require('bcryptjs');
 const { PersistedEntity } = require('../base');
 
 class User extends PersistedEntity {
@@ -36,21 +36,13 @@ class User extends PersistedEntity {
     return undefined;
   }
 
-  constructor(name, email, birthday, password) {
+  constructor({ name, email, birthday, password }) {
     super();
 
     this._name = name;
     this._email = email;
     this._birthday = birthday;
-    this._password = this.createHash(password);
-  }
-
-  createHash(passwd) {
-    return createHash('sha256', {
-      secretKey: process.env.secretKey,
-    })
-      .update(passwd)
-      .digest('base64');
+    this._password = password;
   }
 
   get name() {
