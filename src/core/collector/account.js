@@ -1,8 +1,8 @@
 const { PersistedEntity } = require('../base');
 
-class Accounts extends PersistedEntity {
+class Account extends PersistedEntity {
   static getEntityClass() {
-    return Accounts;
+    return Account;
   }
 
   static serialize(account) {
@@ -15,7 +15,7 @@ class Accounts extends PersistedEntity {
 
   static deserialize(serialized) {
     if (serialized) {
-      const accounts = new Accounts(serialized.user_id);
+      const accounts = new Account(serialized.user_id);
       accounts._id = serialized.id;
       accounts._created_at = serialized.created_at;
 
@@ -35,4 +35,4 @@ class Accounts extends PersistedEntity {
   }
 }
 
-module.exports = Accounts;
+module.exports = Account;

@@ -1,9 +1,9 @@
 const { createHash } = require('crypto');
 const { PersistedEntity } = require('../base');
 
-class Users extends PersistedEntity {
+class User extends PersistedEntity {
   static getEntityClass() {
-    return Users;
+    return User;
   }
 
   static serialize(user) {
@@ -19,7 +19,7 @@ class Users extends PersistedEntity {
 
   static deserialize(serialized) {
     if (serialized) {
-      const user = new Users(
+      const user = new User(
         serialized.name,
         serialized.email,
         serialized.birthday,
@@ -66,4 +66,4 @@ class Users extends PersistedEntity {
   }
 }
 
-module.exports = Users;
+module.exports = User;

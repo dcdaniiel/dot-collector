@@ -4,11 +4,11 @@ const { persist_options } = require('../../../../settings/persist_options');
 
 const _clean = () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);
-  const evalt = persistor.getPersistInstance('Evaluations');
-  const attr = persistor.getPersistInstance('Attributes');
-  const evnt = persistor.getPersistInstance('Events');
-  const usr = persistor.getPersistInstance('Users');
-  const acc = persistor.getPersistInstance('Accounts');
+  const evalt = persistor.getPersistInstance('Evaluation');
+  const attr = persistor.getPersistInstance('Attribute');
+  const evnt = persistor.getPersistInstance('Event');
+  const usr = persistor.getPersistInstance('User');
+  const acc = persistor.getPersistInstance('Account');
 
   evalt.deleteAll();
   attr.deleteAll();

@@ -1,8 +1,8 @@
 const { PersistedEntity } = require('../base');
 
-class Attributes extends PersistedEntity {
+class Attribute extends PersistedEntity {
   static getEntityClass() {
-    return Attributes;
+    return Attribute;
   }
 
   static serialize(attribute) {
@@ -15,7 +15,7 @@ class Attributes extends PersistedEntity {
 
   static deserialize(serialized) {
     if (serialized) {
-      const attribute = new Attributes(serialized.name);
+      const attribute = new Attribute(serialized.name);
       attribute._id = serialized.id;
       attribute._created_at = serialized.created_at;
 
@@ -32,4 +32,4 @@ class Attributes extends PersistedEntity {
   }
 }
 
-module.exports = Attributes;
+module.exports = Attribute;

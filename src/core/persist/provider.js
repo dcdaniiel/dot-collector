@@ -16,6 +16,7 @@ const {
   AccountsMemoryPersist,
   TransfersMemoryPersist,
   CoinsMemoryPersist,
+  RewardMemoryPersist,
 } = require('./memory');
 const { PersistorSingleton } = require('./persist');
 
@@ -30,25 +31,26 @@ class PersistorProvider {
       case 'knex':
         const db = args[0];
         class_map = {
-          Users: [UsersKnexPersist, db],
-          Events: [EventsKnexPersist, db],
-          Attributes: [AttributesKnexPersist, db],
-          Evaluations: [EvaluationsKnexPersist, db],
-          Accounts: [AccountsKnexPersist, db],
-          Transfers: [TransfersKnexPersist, db],
-          Coins: [CoinsKnexPersist, db],
-          Rewards: [RewardsKnexPersist, db],
+          User: [UsersKnexPersist, db],
+          Event: [EventsKnexPersist, db],
+          Attribute: [AttributesKnexPersist, db],
+          Evaluation: [EvaluationsKnexPersist, db],
+          Account: [AccountsKnexPersist, db],
+          Transfer: [TransfersKnexPersist, db],
+          Coin: [CoinsKnexPersist, db],
+          Reward: [RewardsKnexPersist, db],
         };
         break;
       case 'memory':
         class_map = {
-          Users: [UsersMemoryPersist],
-          Events: [EventsMemoryPersist],
-          Attributes: [AttributesMemoryPersist],
-          Evaluations: [EvaluationsMemoryPersist],
-          Accounts: [AccountsMemoryPersist],
-          Transfers: [TransfersMemoryPersist],
-          Coins: [CoinsMemoryPersist],
+          User: [UsersMemoryPersist],
+          Event: [EventsMemoryPersist],
+          Attribute: [AttributesMemoryPersist],
+          Evaluation: [EvaluationsMemoryPersist],
+          Account: [AccountsMemoryPersist],
+          Transfer: [TransfersMemoryPersist],
+          Coin: [CoinsMemoryPersist],
+          Reward: [RewardMemoryPersist],
         };
         break;
       default:

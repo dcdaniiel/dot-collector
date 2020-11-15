@@ -1,11 +1,11 @@
-const User = require('./users');
-const Event = require('./events');
-const Attribute = require('./attributes');
-const Coin = require('./coins');
-const Account = require('./accounts');
-const Reward = require('./rewards');
-const { Evaluations, EvaluationsStatus } = require('./evaluations');
-const { Transfers, TransferTypes } = require('./transfer');
+const User = require('./user');
+const Event = require('./event');
+const Attribute = require('./attribute');
+const Coin = require('./coin');
+const Account = require('./account');
+const Reward = require('./reward');
+const { Evaluation, EvaluationsStatus } = require('./evaluation');
+const { Transfer, TransferTypes } = require('./transfer');
 
 module.exports = {
   User,
@@ -16,6 +16,6 @@ module.exports = {
   TransferTypes,
   EvaluationsStatus,
   Reward,
-  Evaluation: Evaluations,
-  Transfer: Transfers,
+  Evaluation,
+  Transfer,
 };

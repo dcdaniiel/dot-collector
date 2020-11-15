@@ -14,9 +14,9 @@ class EvaluationsStatus {
   }
 }
 
-class Evaluations extends PersistedEntity {
+class Evaluation extends PersistedEntity {
   static getEntityClass() {
-    return Evaluations;
+    return Evaluation;
   }
 
   static serialize(evaluation) {
@@ -35,7 +35,7 @@ class Evaluations extends PersistedEntity {
 
   static deserialize(serialized) {
     if (serialized) {
-      const Evaluation = new Evaluations(
+      const data = new Evaluation(
         serialized.evaluator_id,
         serialized.rated_id,
         serialized.event_id,
@@ -43,12 +43,12 @@ class Evaluations extends PersistedEntity {
         serialized.note
       );
 
-      Evaluation._id = serialized.id;
-      Evaluation._created_at = serialized.created_at;
-      Evaluation._description = serialized.description;
-      Evaluation._status = serialized.status;
+      data._id = serialized.id;
+      data._created_at = serialized.created_at;
+      data._description = serialized.description;
+      data._status = serialized.status;
 
-      return Evaluation;
+      return data;
     }
     return undefined;
   }
@@ -73,4 +73,4 @@ class Evaluations extends PersistedEntity {
   }
 }
 
-module.exports = { Evaluations, EvaluationsStatus };
+module.exports = { Evaluation, EvaluationsStatus };

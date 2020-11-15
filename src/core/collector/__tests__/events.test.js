@@ -3,6 +3,13 @@ const { PersistorProvider } = require('../../persist/provider');
 const { Event } = require('../index');
 const { persist_options } = require('../../../../settings/persist_options');
 
+const _clean = async () => {
+  const persistor = PersistorProvider.getPersistor(...persist_options);
+  const evt = persistor.getPersistInstance('Event');
+
+  await evt.deleteAll();
+};
+
 beforeEach(async () => {
   await _clean();
 });
@@ -49,9 +56,3 @@ describe('Events', () => {
     expect(fetched_Event).toBeFalsy();
   });
 });
-
-const _clean = () => {
-  const persistor = PersistorProvider.getPersistor(...persist_options);
-  const evt = persistor.getPersistInstance('Events');
-  evt.deleteAll();
-};

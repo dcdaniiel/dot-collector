@@ -10,9 +10,9 @@ class TransferTypes {
   }
 }
 
-class Transfers extends PersistedEntity {
+class Transfer extends PersistedEntity {
   static getEntityClass() {
-    return Transfers;
+    return Transfer;
   }
 
   static serialize(transfer) {
@@ -29,7 +29,7 @@ class Transfers extends PersistedEntity {
 
   static deserialize(serialized) {
     if (serialized) {
-      const transfer = new Transfers(
+      const transfer = new Transfer(
         serialized.from_account,
         serialized.to_account,
         serialized.value,
@@ -74,4 +74,4 @@ class Transfers extends PersistedEntity {
   }
 }
 
-module.exports = { Transfers, TransferTypes };
+module.exports = { Transfer, TransferTypes };

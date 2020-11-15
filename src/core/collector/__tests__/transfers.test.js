@@ -4,8 +4,8 @@ const { persist_options } = require('../../../../settings/persist_options');
 
 const _clean = async () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);
-  const users = persistor.getPersistInstance('Users');
-  const transfers = persistor.getPersistInstance('Transfers');
+  const users = persistor.getPersistInstance('User');
+  const transfers = persistor.getPersistInstance('Transfer');
 
   await transfers.deleteAll();
   await users.deleteAll();

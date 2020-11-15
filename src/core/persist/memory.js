@@ -217,6 +217,26 @@ class CoinsMemoryPersist extends MemoryPersist {
   }
 }
 
+class RewardMemoryPersist extends MemoryPersist {
+  get instance() {
+    return this._instance;
+  }
+
+  set instance(instance) {
+    this._instance = instance;
+  }
+
+  constructor() {
+    super(Coin);
+
+    if (CoinsMemoryPersist.instance) {
+      return CoinsMemoryPersist.instance;
+    }
+
+    CoinsMemoryPersist.instance = this;
+  }
+}
+
 module.exports = {
   MemoryPersist,
   UsersMemoryPersist,
@@ -226,4 +246,5 @@ module.exports = {
   AccountsMemoryPersist,
   TransfersMemoryPersist,
   CoinsMemoryPersist,
+  RewardMemoryPersist,
 };

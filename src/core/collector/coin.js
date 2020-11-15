@@ -1,8 +1,8 @@
 const { PersistedEntity } = require('../base');
 
-class Coins extends PersistedEntity {
+class Coin extends PersistedEntity {
   static getEntityClass() {
-    return Coins;
+    return Coin;
   }
 
   static serialize(coin) {
@@ -17,7 +17,7 @@ class Coins extends PersistedEntity {
 
   static deserialize(serialized) {
     if (serialized) {
-      const coin = new Coins(
+      const coin = new Coin(
         serialized._author_id,
         serialized._transfer_id,
         serialized._quantity
@@ -41,4 +41,4 @@ class Coins extends PersistedEntity {
   }
 }
 
-module.exports = Coins;
+module.exports = Coin;

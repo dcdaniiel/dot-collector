@@ -4,7 +4,7 @@ const { persist_options } = require('../../../../settings/persist_options');
 
 const _clean = async () => {
   const persistor = PersistorProvider.getPersistor(...persist_options);
-  const cc = persistor.getPersistInstance('Coins');
+  const cc = persistor.getPersistInstance('Coin');
 
   await cc.deleteAll();
 };

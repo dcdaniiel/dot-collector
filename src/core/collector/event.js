@@ -1,8 +1,8 @@
 const { PersistedEntity } = require('../base');
 
-class Events extends PersistedEntity {
+class Event extends PersistedEntity {
   static getEntityClass() {
-    return Events;
+    return Event;
   }
 
   static serialize(event) {
@@ -15,7 +15,7 @@ class Events extends PersistedEntity {
 
   static deserialize(serialized) {
     if (serialized) {
-      const event = new Events(serialized.name);
+      const event = new Event(serialized.name);
       event._id = serialized.id;
       event._created_at = serialized.created_at;
 
@@ -35,4 +35,4 @@ class Events extends PersistedEntity {
   }
 }
 
-module.exports = Events;
+module.exports = Event;

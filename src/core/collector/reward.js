@@ -1,8 +1,8 @@
 const { PersistedEntity } = require('../base');
 
-class Rewards extends PersistedEntity {
+class Reward extends PersistedEntity {
   static getEntityClass() {
-    return Rewards;
+    return Reward;
   }
 
   static serialize(reward) {
@@ -18,7 +18,7 @@ class Rewards extends PersistedEntity {
 
   static deserialize(serialized) {
     if (serialized) {
-      const reward = new Rewards(
+      const reward = new Reward(
         serialized._author_id,
         serialized._transfer_id,
         serialized._name,
@@ -44,4 +44,4 @@ class Rewards extends PersistedEntity {
   }
 }
 
-module.exports = Rewards;
+module.exports = Reward;
