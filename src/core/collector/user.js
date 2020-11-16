@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const { PersistedEntity } = require('../base');
 
 class User extends PersistedEntity {
@@ -36,7 +35,7 @@ class User extends PersistedEntity {
     return undefined;
   }
 
-  constructor({ name, email, birthday, password }) {
+  constructor(name, email, birthday, password) {
     super();
 
     this._name = name;

@@ -194,13 +194,12 @@ class TransfersKnexPersist extends KnexPersist {
             );
 
             try {
-              const data = await trx('rewards').insert(
+              return trx('rewards').insert(
                 Reward.serialize(new Reward(to_account, id, name, quantity)),
                 '*'
               );
-              console.log('TESTE:::', data);
             } catch (e) {
-              console.log('TESTE:::', e);
+              return e.detail;
             }
 
             return 'Success on get the reward.';

@@ -1,7 +1,7 @@
 require('dotenv').config();
 
-const { server } = require('./api');
+const { startServer } = require('./api');
 
-const start = server(process.env.PORT, 'knex');
+const start = startServer(process.env.PORT, 'knex');
 
 module.exports = start;

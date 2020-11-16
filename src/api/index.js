@@ -13,7 +13,7 @@ const corsOptions = {
   allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
 };
 
-const server = async (port) => {
+const startServer = async (port) => {
   const app = new Koa();
 
   PersistorProvider.getPersistor(...persist_options);
@@ -44,10 +44,8 @@ const server = async (port) => {
   }
 
   return app.listen(port, () => {
-    console.log(
-      `Dot collector server is running on port: ${process.env.PORT} !`
-    );
+    console.log(`Dot collector server is running on port: ${port}!`);
   });
 };
 
-module.exports = { server };
+module.exports = { startServer };
